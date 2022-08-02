@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const [amount1, setAmountOne] = useState(1);
-  const [amount2, setAmountTwo] = useState(1);
-  const [currency1, setCurrencyOne] = useState("USD");
-  const [currency2, setCurrencyTwo] = useState("USD");
+  const [amountOne, setAmountOne] = useState(1);
+  const [amountTwo, setAmountTwo] = useState(1);
+  const [currencyOne, setCurrencyOne] = useState("NGN");
+  const [currencyTwo, setCurrencyTwo] = useState("USD");
   const [rates, getRates] = useState([]);
 
   useEffect(() => {
@@ -18,23 +18,51 @@ function App() {
       .then((response) => {
         getRates(response.data.rates);
       });
-  }, []);
+  }, [rates]);
+
+  useEffect(() => {
+    if (!!rates) {
+      handleAmountOneChange(1);
+    }
+  }, [rates]);
+
+  function format(number) {
+    return number.toFixed(4);
+  }
+
+  function handleAmountOneChange(amountOne) {
+    setAmountTwo(format((amountOne * rates[currencyTwo]) / rates[currencyOne]));
+    setAmountOne(amountOne);
+  }
+  function handleCurrencyOneChange(currencyOne) {
+    setAmountTwo(format((amountOne * rates[currencyTwo]) / rates[currencyOne]));
+    setCurrencyOne(currencyOne);
+  }
+
+  function handleAmountTwoChange(amountTwo) {
+    setAmountOne(format((amountTwo * rates[currencyOne]) / rates[currencyTwo]));
+    setAmountTwo(amountTwo);
+  }
+  function handleCurrencyTwoChange(currencyTwo) {
+    setAmountOne(format((amountTwo * rates[currencyOne]) / rates[currencyTwo]));
+    setCurrencyTwo(currencyTwo);
+  }
 
   return (
     <div className="App">
       <CurrencyInput
-        onAmountChange={setAmountOne}
-        onCurrencyChange={setCurrencyOne}
+        onAmountChange={handleAmountOneChange}
+        onCurrencyChange={handleCurrencyOneChange}
         currencies={Object.keys(rates)}
-        amount={amount1}
-        currency={currency1}
+        amount={amountOne}
+        currency={currencyOne}
       />
       <CurrencyInput
-        onCurrencyChange={setCurrencyTwo}
-        onAmountChange={setAmountTwo}
+        onCurrencyChange={handleCurrencyTwoChange}
+        onAmountChange={handleAmountTwoChange}
         currencies={Object.keys(rates)}
-        amount={amount2}
-        currency={currency2}
+        amount={amountTwo}
+        currency={currencyTwo}
       />
     </div>
   );
