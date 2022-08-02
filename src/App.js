@@ -1,7 +1,8 @@
 import "./App.css";
-import CurrencyInput from "./CurrencyInput";
+import CurrencyInput from "./components/CurrencyInput";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Header from "./components/Header";
 
 function App() {
   const [amountOne, setAmountOne] = useState(1);
@@ -50,20 +51,23 @@ function App() {
 
   return (
     <div className="App">
-      <CurrencyInput
-        onAmountChange={handleAmountOneChange}
-        onCurrencyChange={handleCurrencyOneChange}
-        currencies={Object.keys(rates)}
-        amount={amountOne}
-        currency={currencyOne}
-      />
-      <CurrencyInput
-        onCurrencyChange={handleCurrencyTwoChange}
-        onAmountChange={handleAmountTwoChange}
-        currencies={Object.keys(rates)}
-        amount={amountTwo}
-        currency={currencyTwo}
-      />
+      <div className="container">
+        <Header />
+        <CurrencyInput
+          onAmountChange={handleAmountOneChange}
+          onCurrencyChange={handleCurrencyOneChange}
+          currencies={Object.keys(rates)}
+          amount={amountOne}
+          currency={currencyOne}
+        />
+        <CurrencyInput
+          onCurrencyChange={handleCurrencyTwoChange}
+          onAmountChange={handleAmountTwoChange}
+          currencies={Object.keys(rates)}
+          amount={amountTwo}
+          currency={currencyTwo}
+        />
+      </div>
     </div>
   );
 }
